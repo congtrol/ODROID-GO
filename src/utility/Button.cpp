@@ -146,6 +146,12 @@ uint8_t Button::isReleased(void)
     return _state == 0 ? 1 : 0;
 }
 
+uint8_t Button::isChanged(void)
+{
+    return _changed;
+}
+
+
 /*----------------------------------------------------------------------*
  * wasPressed() and wasReleased() check the button state to see if it   *
  * changed between the last two reads and return false (0) or           *

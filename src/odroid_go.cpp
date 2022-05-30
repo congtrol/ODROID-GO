@@ -11,7 +11,7 @@ void ODROID_GO::begin(unsigned long baud) {
     Serial.flush();
     Serial.print("ODROID_GO initializing...");
 
-    Speaker.begin();
+    // Speaker.begin();
 
     pinMode(BUTTON_A_PIN, INPUT_PULLUP);
     pinMode(BUTTON_B_PIN, INPUT_PULLUP);
@@ -50,7 +50,15 @@ void ODROID_GO::update() {
     JOY_X.readAxis();
 
     //Speaker update
-    Speaker.update();
+    // Speaker.update();
     battery.update();
 }
+
+uint8_t ODROID_GO::checkButtons(){
+    update();
+    return ( BtnA.isChanged() || BtnB.isChanged() || BtnMenu.isChanged() || BtnVolume.isChanged() || 
+    BtnSelect.isChanged() || BtnStart.isChanged() || JOY_Y.isChanged() || JOY_X.isChanged() );
+}
+
+
 ODROID_GO GO;

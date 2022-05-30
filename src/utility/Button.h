@@ -29,6 +29,7 @@ class Button
         uint8_t isPressed();
         uint8_t isAxisPressed();
         uint8_t isReleased();
+        uint8_t isChanged();
         uint8_t wasPressed();
         uint8_t wasAxisPressed();
         uint8_t wasReleased();

@@ -21,6 +21,7 @@ class ODROID_GO {
  public:
     void begin(unsigned long baud = 115200);
     void update();
+    uint8_t checkButtons();
 
     #define DEBOUNCE_MS 5
     Button JOY_Y = Button(BUTTON_JOY_Y, true, DEBOUNCE_MS);
