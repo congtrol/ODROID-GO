@@ -60,5 +60,92 @@ uint8_t ODROID_GO::checkButtons(){
     BtnSelect.isChanged() || BtnStart.isChanged() || JOY_Y.isChanged() || JOY_X.isChanged() );
 }
 
+void ODROID_GO::command (const uint8_t *data, uint16_t len)
+{
+    int chLen = data[1];
+    int msgLen = len - chLen - 2;
+
+    Serial.print(F("PUB_STR_CH"));
+    Serial.write( (const char *)(data + 2), chLen);
+    Serial.print(" ");
+    Serial.write( (const char *)(data + 2 + chLen ), len - chLen - 2);
+    Serial.println();
+
+    data += 2 + chLen;
+
+
+    uint8_t cmd = data[0]; 
+    if( cmd >= 32 && cmd <= 126){
+        //string message
+        // data++;
+        for(int i = 0; i < msgLen  ; i++)
+            GO.lcd.write( *(data++) );
+    }else{
+        //byte command
+        switch( cmd ){
+            //
+            case 5 ://fillBlack, position 0
+                {
+                GO.lcd.setCursor(0,0);
+                GO.lcd.setTextColor(WHITE);
+                GO.lcd.clear();
+                } 
+                break;
+            case 0 ://setTextFont
+                {
+                GO.lcd.setTextFont( data[1] );
+                } 
+                break;
+            case 1 ://setTextSize
+                {
+                GO.lcd.setTextSize( data[1] );
+                } 
+                break;
+            case 2 ://setTextColor
+                {
+                uint16_t color =  ( (uint16_t)data[2] << 8 ) + data[1];
+                GO.lcd.setTextColor( color);
+                } 
+                break;
+            case 3 ://setCursor
+                {
+                //read i16 x ,i16 y
+                int16_t x =  ( (uint16_t)data[2] << 8 ) + data[1];
+                int16_t y =  ( (uint16_t)data[4] << 8 ) + data[3];
+                GO.lcd.setCursor(x,y);
+                } 
+                break;
+            case 4 ://fillRect
+                {
+                    if(msgLen == 11){
+                        int16_t x =  ( (uint16_t)data[2] << 8 ) + data[1];
+                        int16_t y =  ( (uint16_t)data[4] << 8 ) + data[3];
+                        int16_t w =  ( (uint16_t)data[6] << 8 ) + data[5];
+                        int16_t h =  ( (uint16_t)data[8] << 8 ) + data[7];
+                        uint16_t color =  ( (uint16_t)data[10] << 8 ) + data[9];
+                        GO.lcd.fillRect( (int32_t)x, (int32_t)y, (int32_t)w, (int32_t)h, (uint32_t)color );
+                        
+                    }else{
+                        GO.lcd.print("invalid fillRect Size");
+                        GO.lcd.print( msgLen);
+                    }
+                break;
+                }
+
+            default:
+                GO.lcd.print("invalid CMD");
+            break;
+        }
+    }
+    
+
+//    for( int d = 0; d < msgLen ; d++) GO.lcd.write( *(data++));
+
+
+
+}
+
+
+
 
 ODROID_GO GO;

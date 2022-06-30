@@ -37,6 +37,34 @@ class ODROID_GO {
     SPEAKER Speaker;
     Battery battery;
 
+    void command( const uint8_t *data, uint16_t len);
+
+/*
+
+    setTextFont( u8)    'f':d1
+    setTextSize( u8)    's':d1
+    setTextColor( u16)  'c':d2
+
+    setCursor(i16,i16)  'p':d4(d2,d2)
+    fillRect( i32,i32,i32,i32,u32) 'fill':d20 (d4,d4,d4,d4,d4 )
+
+    drawPixel( u32 x, u32 y, u32color)
+
+    print("String")
+
+    pub_str_ch
+    cmd:
+    chLen:
+    chStr:
+    data:
+
+    // sender
+
+    pub #gocmd  payload
+
+
+
+*/
 };
 
 extern ODROID_GO GO;
