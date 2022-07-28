@@ -64,15 +64,7 @@ void ODROID_GO::command (const uint8_t *data, uint16_t len)
 {
     int chLen = data[1];
     int msgLen = len - chLen - 2;
-
-    Serial.print(F("PUB_STR_CH"));
-    Serial.write( (const char *)(data + 2), chLen);
-    Serial.print(" ");
-    Serial.write( (const char *)(data + 2 + chLen ), len - chLen - 2);
-    Serial.println();
-
     data += 2 + chLen;
-
 
     uint8_t cmd = data[0]; 
     if( cmd >= 32 && cmd <= 126){
@@ -104,7 +96,8 @@ void ODROID_GO::command (const uint8_t *data, uint16_t len)
             case 2 ://setTextColor
                 {
                 uint16_t color =  ( (uint16_t)data[2] << 8 ) + data[1];
-                GO.lcd.setTextColor( color);
+                uint16_t colorbg =  ( (uint16_t)data[4] << 8 ) + data[3];
+                GO.lcd.setTextColor( color, colorbg);
                 } 
                 break;
             case 3 ://setCursor
