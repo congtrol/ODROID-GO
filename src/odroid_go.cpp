@@ -63,8 +63,8 @@ uint8_t ODROID_GO::checkButtons(){
 void ODROID_GO::command (const uint8_t *data, uint16_t len)
 {
     int chLen = data[1];
-    int msgLen = len - chLen - 2;
-    data += 2 + chLen;
+    int msgLen = len - chLen - 3;
+    data += 3 + chLen;  // signal payload offset.
 
     uint8_t cmd = data[0]; 
     if( cmd >= 32 && cmd <= 126){
