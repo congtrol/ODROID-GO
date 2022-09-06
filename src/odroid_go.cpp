@@ -62,15 +62,18 @@ uint8_t ODROID_GO::checkButtons(){
 
 void ODROID_GO::command (const uint8_t *data, uint16_t len)
 {
+  // data is signal pack
+  // 0: type, 1, chLen, 2~n, chStr, 
+  //  payloadType, payload
     int chLen = data[1];
-    int msgLen = len - chLen - 3;
+    int payloadLen = len - chLen - 3;
     data += 3 + chLen;  // signal payload offset.
 
     uint8_t cmd = data[0]; 
     if( cmd >= 32 && cmd <= 126){
         //string message
         // data++;
-        for(int i = 0; i < msgLen  ; i++)
+        for(int i = 0; i < payloadLen  ; i++)
             GO.lcd.write( *(data++) );
     }else{
         //byte command
@@ -110,7 +113,7 @@ void ODROID_GO::command (const uint8_t *data, uint16_t len)
                 break;
             case 4 ://fillRect
                 {
-                    if(msgLen == 11){
+                    if(payloadLen == 11){
                         int16_t x =  ( (uint16_t)data[2] << 8 ) + data[1];
                         int16_t y =  ( (uint16_t)data[4] << 8 ) + data[3];
                         int16_t w =  ( (uint16_t)data[6] << 8 ) + data[5];
@@ -120,7 +123,7 @@ void ODROID_GO::command (const uint8_t *data, uint16_t len)
                         
                     }else{
                         GO.lcd.print("invalid fillRect Size");
-                        GO.lcd.print( msgLen);
+                        GO.lcd.print( payloadLen);
                     }
                 break;
                 }
@@ -132,7 +135,7 @@ void ODROID_GO::command (const uint8_t *data, uint16_t len)
     }
     
 
-//    for( int d = 0; d < msgLen ; d++) GO.lcd.write( *(data++));
+//    for( int d = 0; d < payloadLen ; d++) GO.lcd.write( *(data++));
 
 
 
