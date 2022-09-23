@@ -37,7 +37,7 @@ class ODROID_GO {
     SPEAKER Speaker;
     Battery battery;
 
-    void command( const uint8_t *data, uint16_t len);
+    void command( const uint8_t *data, size_t len);
 
 /*
 

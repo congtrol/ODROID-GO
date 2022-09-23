@@ -60,14 +60,8 @@ uint8_t ODROID_GO::checkButtons(){
     BtnSelect.isChanged() || BtnStart.isChanged() || JOY_Y.isChanged() || JOY_X.isChanged() );
 }
 
-void ODROID_GO::command (const uint8_t *data, uint16_t len)
+void ODROID_GO::command (const uint8_t *data, size_t payloadLen)
 {
-  // data is signal pack
-  // 0: type, 1, chLen, 2~n, chStr, 
-  //  payloadType, payload
-    int chLen = data[1];
-    int payloadLen = len - chLen - 3;
-    data += 3 + chLen;  // signal payload offset.
 
     uint8_t cmd = data[0]; 
     if( cmd >= 32 && cmd <= 126){
@@ -79,13 +73,7 @@ void ODROID_GO::command (const uint8_t *data, uint16_t len)
         //byte command
         switch( cmd ){
             //
-            case 5 ://fillBlack, position 0
-                {
-                GO.lcd.setCursor(0,0);
-                GO.lcd.setTextColor(WHITE);
-                GO.lcd.clear();
-                } 
-                break;
+
             case 0 ://setTextFont
                 {
                 GO.lcd.setTextFont( data[1] );
@@ -124,6 +112,26 @@ void ODROID_GO::command (const uint8_t *data, uint16_t len)
                     }else{
                         GO.lcd.print("invalid fillRect Size");
                         GO.lcd.print( payloadLen);
+                    }
+                }
+                break;
+
+            case 5 ://fillBlack, position 0
+                {
+                  GO.lcd.setCursor(0,0);
+                  GO.lcd.setTextColor(WHITE);
+                  GO.lcd.clear();
+                } 
+                break;
+            case 6 :// image (rgb565 format)
+                {
+                    if(payloadLen == 153601){
+                      data++;
+                      uint16_t *img = (uint16_t *)data;
+                      GO.lcd.pushRect(0,0,320,240,img);
+                    }else{
+                      GO.lcd.print("invalid rgb565 Size");
+                      GO.lcd.print( payloadLen);
                     }
                 break;
                 }
