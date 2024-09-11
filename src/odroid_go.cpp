@@ -32,7 +32,7 @@ void ODROID_GO::begin(unsigned long baud) {
     lcd.setBrightness(255);
 
     // Battery
-    battery.begin();
+    // battery.begin();
 
     Serial.println("OK");
 }
@@ -51,7 +51,7 @@ void ODROID_GO::update() {
 
     //Speaker update
     // Speaker.update();
-    battery.update();
+    // battery.update();
 }
 
 uint8_t ODROID_GO::checkButtons(){

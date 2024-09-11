@@ -8,9 +8,9 @@
 #include "utility/Config.h"
 
 #include "utility/Display.h"
-#include "utility/Speaker.h"
 #include "utility/Button.h"
-#include "utility/battery.h"
+// #include "utility/Speaker.h"
+// #include "utility/battery.h"
 
 extern "C" {
 #include "esp_sleep.h"
@@ -34,8 +34,8 @@ class ODROID_GO {
     Button BtnStart = Button(BUTTON_START, true, DEBOUNCE_MS);
 
     ILI9341 lcd = ILI9341();
-    SPEAKER Speaker;
-    Battery battery;
+    // SPEAKER Speaker;
+    // Battery battery;
 
     void command( const uint8_t *data, size_t len);
 
